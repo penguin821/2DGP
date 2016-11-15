@@ -10,7 +10,7 @@ logo_time = 0.0
 
 def enter():
     global image
-    open_canvas(400, 600)
+    open_canvas(400, 600, sync = True)
     image = load_image('kpu.png')
 
 
