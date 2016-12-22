@@ -61,7 +61,7 @@ class Starting_Point:
             self.y -= MAP_SPEED
         elif point >= 100 and point < 400:
             self.y -= MAP_SPEED * 3/2
-        elif point >= 400 and point < 750:
+        elif point >= 400 and point < 650:
             self.y -= MAP_SPEED * 2
         elif point >= 750:
             self.y -= MAP_SPEED * 2.5
@@ -87,7 +87,7 @@ class Finish:
             self.y -= MAP_SPEED
         elif point >= 100 and point < 400:
             self.y -= MAP_SPEED * 3/2
-        elif point >= 400 and point < 750:
+        elif point >= 400 and point < 650:
             self.y -= MAP_SPEED * 2
         elif point >= 750:
             self.y -= MAP_SPEED * 2.5
@@ -162,7 +162,7 @@ class Map:
             self.y -= MAP_SPEED
         elif point >= 100 and point < 400:
             self.y -= MAP_SPEED * 3/2
-        elif point >= 400 and point < 750:
+        elif point >= 400 and point < 650:
             self.y -= MAP_SPEED * 2
         elif point >= 750:
             self.y -= MAP_SPEED * 2.5
@@ -249,7 +249,7 @@ class Tile:
             self.y -= MAP_SPEED
         elif point >= 100 and point < 400:
             self.y -= MAP_SPEED * 3/2
-        elif point >= 400 and point < 750:
+        elif point >= 400 and point < 650:
             self.y -= MAP_SPEED * 2
         elif point >= 750:
             self.y -= MAP_SPEED * 2.5
@@ -267,7 +267,7 @@ class Ball:
             self.x -= BALL_SPEED
         elif point >= 100 and point < 400:
             self.x -= BALL_SPEED * 3/2
-        elif point >= 400 and point < 750:
+        elif point >= 400 and point < 650:
             self.x -= BALL_SPEED * 2
         elif point >= 750:
             self.x -= BALL_SPEED * 2.5
@@ -281,7 +281,7 @@ class Ball:
             self.x += BALL_SPEED
         elif point >= 100 and point < 400:
             self.x += BALL_SPEED * 1.5
-        elif point >= 400 and point < 750:
+        elif point >= 400 and point < 650:
             self.x += BALL_SPEED * 2
         elif point >= 750:
             self.x += BALL_SPEED * 2.5
@@ -436,6 +436,7 @@ def update():
     if collide_tile(starting_point, ball, 1):
         count = 1
     if count == 0:
+        print("Your Score is %d!" % point)
         point = 0
         game_framework.push_state(gameover_state)
 
