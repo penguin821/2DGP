@@ -5,10 +5,12 @@ from pico2d import *
 
 name = "GameoverState"
 image = None
+font = None
 
 
 def enter():
     global image
+    font = load_font('ENCR10B.TTF')
     image = load_image('gameover.png')
 
 

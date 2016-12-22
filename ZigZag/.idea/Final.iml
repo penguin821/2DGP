@@ -4,5 +4,9 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="Drill7-RankingDisplay" />
+    <orderEntry type="module" module-name="Lab11 - Sound" />
+    <orderEntry type="module" module-name="Lab03" />
+    <orderEntry type="module" module-name="Lab09 - Collision Handling" />
   </component>
 </module>

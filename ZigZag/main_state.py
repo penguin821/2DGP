@@ -2,10 +2,19 @@ import random
 from pico2d import *
 
 import game_framework
-import title_state
 import gameover_state
 
+current_time = get_time()
+frame_time = get_time() - current_time
 
+PIXEL_PER_METER = (10.0 / 0.3)           # 10 pixel 30 cm
+MOVING_SPEED_KMPH = 20.0                    # Km / Hour
+MOVING_SPEED_MPM = (MOVING_SPEED_KMPH * 1000.0 / 60.0)
+MOVING_SPEED_MPS = (MOVING_SPEED_MPM / 60.0)
+MOVING_SPEED_PPS = (MOVING_SPEED_MPS * PIXEL_PER_METER)
+TIME_PER_ACTION = 0.5
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION = 3
 
 name = "MainState"
 
@@ -14,6 +23,7 @@ map = None
 starting_point = None
 background = None
 ball = None
+jewel = None
 font = None
 running = None
 lastX = None
@@ -21,12 +31,20 @@ lastY = None
 lastDirection = None
 count = None
 i = None
+font = None
+point = 0
 
+BALL_SPEED = 1.5
+MAP_SPEED = 1.1
 
 class Background:
+    global point
 
     def __init__(self):
         self.image = load_image('background.png')
+        self.bgm = load_music('Marble Machine.mp3')
+        self.bgm.set_volume(64)
+        self.bgm.repeat_play()
 
     def draw(self):
         self.image.draw(200, 300)
@@ -39,7 +57,14 @@ class Starting_Point:
         self.image = load_image('starting_point.png')
 
     def update(self):
-        self.y -= 0.9
+        if point < 100:
+            self.y -= MAP_SPEED
+        elif point >= 100 and point < 400:
+            self.y -= MAP_SPEED * 3/2
+        elif point >= 400 and point < 750:
+            self.y -= MAP_SPEED * 2
+        elif point >= 750:
+            self.y -= MAP_SPEED * 2.5
 
 
     def draw(self):
@@ -51,6 +76,31 @@ class Starting_Point:
     def draw_bb(self):
         draw_rectangle(*self.get_bb1())
 
+class Finish:
+
+    def __init__(self):
+        self.x, self.y = 200, 5215
+        self.image = load_image('finish.png')
+
+    def update(self):
+        if point < 100:
+            self.y -= MAP_SPEED
+        elif point >= 100 and point < 400:
+            self.y -= MAP_SPEED * 3/2
+        elif point >= 400 and point < 750:
+            self.y -= MAP_SPEED * 2
+        elif point >= 750:
+            self.y -= MAP_SPEED * 2.5
+
+
+    def draw(self):
+        self.image.draw(self.x, self.y)
+
+    def get_bb1(self):
+        return self.x - 200, self.y - 15, self.x + 200, self.y + 15
+
+    def draw_bb(self):
+        draw_rectangle(*self.get_bb1())
 
 class Map:
 
@@ -108,7 +158,14 @@ class Map:
 
 
     def update(self):
-        self.y -= 0.9
+        if point < 100:
+            self.y -= MAP_SPEED
+        elif point >= 100 and point < 400:
+            self.y -= MAP_SPEED * 3/2
+        elif point >= 400 and point < 750:
+            self.y -= MAP_SPEED * 2
+        elif point >= 750:
+            self.y -= MAP_SPEED * 2.5
 
 
     def draw(self):
@@ -120,6 +177,7 @@ class Tile:
     def __init__(self):
         global lastX, lastY, lastDirection
         self.direction = random.randint(0, 1)
+
         if lastDirection == 0:
             if self.direction == 0:
                 if lastX - 150 < 0:
@@ -134,8 +192,8 @@ class Tile:
                 self.image = load_image('map_tile2.png')
         elif lastDirection == 1:
             if self.direction == 0:
-                self.x, self.y = lastX, lastY + 50
-                self.image = load_image('map_tile1.png')
+                   self.x, self.y = lastX, lastY + 50
+                   self.image = load_image('map_tile1.png')
             if self.direction == 1:
                 if lastX + 150 > 400:
                     self.x, self.y = lastX, lastY + 50
@@ -149,6 +207,7 @@ class Tile:
         lastDirection = self.direction
 
     def get_bb1(self):
+
         if self.direction == 1:
             return self.x - 10, self.y + 15, self.x + 70, self.y + 25
         if self.direction == 0:
@@ -186,7 +245,14 @@ class Tile:
         draw_rectangle(*self.get_bb5())
 
     def update(self):
-        self.y -= 0.9
+        if point < 100:
+            self.y -= MAP_SPEED
+        elif point >= 100 and point < 400:
+            self.y -= MAP_SPEED * 3/2
+        elif point >= 400 and point < 750:
+            self.y -= MAP_SPEED * 2
+        elif point >= 750:
+            self.y -= MAP_SPEED * 2.5
 
     def draw(self):
         self.image.draw(self.x, self.y)
@@ -197,13 +263,30 @@ class Ball:
     LEFT_ROLL, RIGHT_ROLL = 0, 1
 
     def handle_left_roll(self):
-        self.x -= 1.0
+        if point < 100:
+            self.x -= BALL_SPEED
+        elif point >= 100 and point < 400:
+            self.x -= BALL_SPEED * 3/2
+        elif point >= 400 and point < 750:
+            self.x -= BALL_SPEED * 2
+        elif point >= 750:
+            self.x -= BALL_SPEED * 2.5
+
         if self.x < 0:
             self.state = self.RIGHT_ROLL
             self.x = 0
 
     def handle_right_roll(self):
-        self.x += 1.0
+        if point < 100:
+            self.x += BALL_SPEED
+        elif point >= 100 and point < 400:
+            self.x += BALL_SPEED * 1.5
+        elif point >= 400 and point < 750:
+            self.x += BALL_SPEED * 2
+        elif point >= 750:
+            self.x += BALL_SPEED * 2.5
+
+
         if self.x > 400:
             self.state = self.LEFT_ROLL
             self.x = 400
@@ -217,7 +300,7 @@ class Ball:
         self.handle_state[self.state](self)
 
     def remove(self):
-        self.x, self.y= 0, 0
+        self.x, self.y = 0, 0
 
     def __init__(self):
         self.x, self.y = 200, 65
@@ -234,15 +317,29 @@ class Ball:
         self.image.draw(self.x, self.y)
 
 
-def enter():
-    global ball, background, starting_point, map, lastX, lastY, lastDirection, maps
-    ball = Ball()
-    background = Background()
-    starting_point = Starting_Point()
-    map = Map()
-    lastX, lastY = map.x, map.y
-    lastDirection = map.direction
-    maps = [Tile() for i in range(100)]
+class Jewel:
+
+    def __init__(self):
+        self.x, self.y = random.randint(100, 400), random.randint(500, 5200)
+        self.falling_speed = random.randint(1, 2)
+        self.frame = 0
+        self.image = load_image('jewel_animation.png')
+
+    def update(self):
+        self.frame = (self.frame + 1) % FRAMES_PER_ACTION
+        self.y -= self.falling_speed
+
+    def remove(self):
+        self.x, self.y = -100, -100
+
+    def get_bb1(self):
+        return self.x-4, self.y-4, self.x+4, self.y+4
+
+    def draw_bb(self):
+        draw_rectangle(*self.get_bb1())
+
+    def draw(self):
+        self.image.clip_draw(self.frame*60, 0, 30, 30, self.x, self.y)
 
 
 def collide_tile(a, b, n):
@@ -270,63 +367,97 @@ def collide_tile(a, b, n):
     return True
 
 
+def enter():
+    global ball, background, starting_point, map, lastX, lastY, lastDirection, maps, font, jewels, finish
+    font = load_font('ENCR10B.TTF')
+    ball = Ball()
+    background = Background()
+    starting_point = Starting_Point()
+    finish = Finish()
+    map = Map()
+    lastX, lastY = map.x, map.y
+    lastDirection = map.direction
+    maps = [Tile() for i in range(100)]
+    jewels = [Jewel() for i in range(160)]
+
+
 def exit():
-    global ball, background, starting_point, map, tile
+    global ball, background, starting_point, map, tile, jewel, font, finish
     del(ball)
     del(background)
     del(starting_point)
     del(map)
     del(tile)
+    del(jewel)
+    del(font)
+    del(finish)
 
 
 def handle_events():
     global count
+    global point
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            game_framework.change_state(title_state)
+            game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
             if ball.state == ball.RIGHT_ROLL:
                 ball.state = ball.LEFT_ROLL
+                point += 1
             elif ball.state == ball.LEFT_ROLL:
                 ball.state = ball.RIGHT_ROLL
+                point += 1
 
 
 def update():
+    global point
     count = 0
     starting_point.update()
+    finish.update()
     map.update()
+
+    for jewel in jewels:
+        if collide_tile(jewel, ball, 1):
+            point += 30
+            jewel.remove()
 
     for i in range(5):
         if collide_tile(map, ball, i + 1):
             count = 1
-            print("count")
+            point += 0.1
     for tile in maps:
         tile.update()
         for i in range(5):
             if collide_tile(tile, ball, i+1):
                 count = 1
-                print("count")
-    if collide_tile(starting_point, ball,1):
+                point += 0.1
+    if collide_tile(starting_point, ball, 1):
         count = 1
-        print("count")
     if count == 0:
+        point = 0
         game_framework.push_state(gameover_state)
 
     ball.update()
+    for jewel in jewels:
+        jewel.update()
 
 
 def draw():
     clear_canvas()
     background.draw()
     starting_point.draw()
+    finish.draw()
     map.draw()
     for tile in maps:
         tile.draw()
 
+    for jewel in jewels:
+        jewel.draw()
+
     ball.draw()
+    font.draw(350, 550, '%d' % point)
 
     update_canvas()
 

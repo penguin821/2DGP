@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://C:/2DGP-nonGIT/Labs/Drill7-RankingDisplay/.idea/Drill7-RankingDisplay.iml" filepath="C:/2DGP-nonGIT/Labs/Drill7-RankingDisplay/.idea/Drill7-RankingDisplay.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Final.iml" filepath="$PROJECT_DIR$/.idea/Final.iml" />
+      <module fileurl="file://C:/2DGP-nonGIT/Labs/Lab03/.idea/Lab03.iml" filepath="C:/2DGP-nonGIT/Labs/Lab03/.idea/Lab03.iml" />
+      <module fileurl="file://C:/2DGP-nonGIT/Labs/Lab09 - Collision Handling/.idea/Lab09 - Collision Handling.iml" filepath="C:/2DGP-nonGIT/Labs/Lab09 - Collision Handling/.idea/Lab09 - Collision Handling.iml" />
+      <module fileurl="file://C:/2DGP-nonGIT/Labs/Lab11 - Sound/.idea/Lab11 - Sound.iml" filepath="C:/2DGP-nonGIT/Labs/Lab11 - Sound/.idea/Lab11 - Sound.iml" />
     </modules>
   </component>
 </project>
